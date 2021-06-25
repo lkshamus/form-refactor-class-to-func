@@ -1,0 +1,9 @@
+@import "../styles/boilerplate-styles.scss";
+
+.form {
+  @include organism-padding();
+
+  input, .ter-select__wrapper {
+    margin: 0 36px 36px 0;
+  }
+}

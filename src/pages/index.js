@@ -1,29 +1,89 @@
-import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import React, { Component } from "react"
+import { navigate } from "gatsby"
+import { TextInput, Select, Button } from "terra-one"
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import "./index.scss"
+import { dropdowns } from "../utils/mockData"
 
-const IndexPage = () => (
-  <Layout>
-    <Seo title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <StaticImage
-      src="../images/gatsby-astronaut.png"
-      width={300}
-      quality={95}
-      formats={["AUTO", "WEBP", "AVIF"]}
-      alt="A Gatsby astronaut"
-      style={{ marginBottom: `1.45rem` }}
-    />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-    </p>
-  </Layout>
-)
+class Form extends Component {
+  constructor() {
+    super()
+    this.state = {
+      meal: "",
+      food: "",
+      name: "",
+      status: true,
+    }
+  }
 
-export default IndexPage
+  handleDropdownSelect = (selection, name) => {
+    this.setState({ [name]: selection })
+  }
+
+  inputChange = e => {
+    this.setState({ name: e.target.value })
+  }
+
+  generateDropdowns = () => {
+    return dropdowns.map((dropdown, index) => {
+      return (
+        <div key={`${dropdown.name}-${index}-dropdown`}>
+          <Select
+            name={dropdown?.name}
+            options={dropdown?.options}
+            handleSelection={this?.handleDropdownSelect}
+            selection={
+              this.state[dropdown?.name] ? this.state[dropdown?.name] : ""
+            }
+            defaultText={dropdown?.defaultText}
+            warning={
+              this.state.status === false && !this.state[dropdown?.name]
+                ? true
+                : false
+            }
+          />
+        </div>
+      )
+    })
+  }
+
+  submitForm = e => {
+    e.preventDefault()
+    if (!this.state.meal || !this.state.food || !this.state.name) {
+      this.setState({ status: false })
+      return
+    } else {
+      this.setState({ statue: true })
+      navigate("/page-2/")
+    }
+  }
+
+  render() {
+    return (
+      <form className="form">
+        <div className="form__container">
+          <TextInput
+            name="name"
+            value={this.state.name}
+            inputChange={e => this.inputChange(e)}
+            label={"Name"}
+            required
+            status={
+              this.state.status === false && !this.state.name
+                ? { className: "error" }
+                : {}
+            }
+          />
+          {this.generateDropdowns()}
+        </div>
+        <Button
+          className="primary--1"
+          text="Submit"
+          onClick={e => this.submitForm(e)}
+        />
+      </form>
+    )
+  }
+}
+
+export default Form

@@ -5,12 +5,10 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 
 const SecondPage = () => (
-  <Layout>
-    <Seo title="Page two" />
-    <h1>Hi from the second page</h1>
-    <p>Welcome to page 2</p>
-    <Link to="/">Go back to the homepage</Link>
-  </Layout>
+  <div style={{ padding: "96px calc((100vw - 1200px) / 2)" }}>
+    <h1>Thank you for your submission!</h1>
+    <Link to="/">Make another submission</Link>
+  </div>
 )
 
 export default SecondPage
